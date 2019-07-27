@@ -1,10 +1,10 @@
-import tensorflow as tf
+import sys
 import json
+import tensorflow as tf
+task_number = int(sys.argv[1])
 
 with open('cluster_ips/cluster_spec.json', 'r') as f:
     cluster_spec = json.load(f)
-
-task_number = 0
 
 cluster = tf.train.ClusterSpec(cluster_spec)
 server = tf.train.Server(cluster, job_name="worker", task_index=task_number)
