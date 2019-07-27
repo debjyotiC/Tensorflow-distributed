@@ -14,6 +14,6 @@ with tf.device("/job:worker/task:0"):
     y = tf.multiply(a, b)
     z = x + y
 
-with tf.compat.v1.Session('grpc://192.168.1.2:2222', config=tf.compat.v1.ConfigProto(log_device_placement=True)) as sess:
+with tf.compat.v1.Session('grpc://X.X.X.X:2222', config=tf.compat.v1.ConfigProto(log_device_placement=True)) as sess:
     print(sess.run(z))
 
