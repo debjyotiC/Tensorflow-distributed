@@ -28,5 +28,5 @@ with tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=T
 
 ```
 In order to distribute you need to create a session on one of those `parameter servers`, and it will compute the graph, possibly distributing parts of it to the `worker` clusters on the server.
-<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/server-clinet-model.png" width="580">
+<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/server-clinet-model.png" width="480">
 
