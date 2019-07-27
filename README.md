@@ -30,3 +30,65 @@ with tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=T
 In order to distribute you need to create a session on one of those `parameter servers`, and it will compute the graph, possibly distributing parts of it to the `worker` clusters on the server.
 <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/server-clinet-model.png" width="480">
 
+##Parameter server side (on Raspberry Pi):
+At the parameter server side, the example code shown above has been modified to support distribution, with a simple `json` file pointing at the IP address of the `worker` machine (the one with a GPU).
+
+```
+import json
+import tensorflow as tf
+
+with open('cluster_spec/clusterspec.json', 'r') as f:
+    clusterspec = json.load(f)
+
+cluster = tf.train.ClusterSpec(clusterspec)
+
+a = tf.constant(3.0)
+b = tf.constant(2.0)
+
+with tf.device("/job:worker/task:0"):
+    x = tf.add(a, b)
+    y = tf.multiply(a, b)
+    z = x + y
+
+with tf.compat.v1.Session('grpc://X.X.X.X:2222', config=tf.compat.v1.ConfigProto(log_device_placement=True)) as sess:
+    print(sess.run(z))
+
+```
+Replace the `x.x.x.x:2222` with the IP address of server that has a GPU in it. (Try `ifconfig`/`ipconfig` for Linux\Windows server), both in the `cluster-tf.py` and the `clusterspec.json` file.
+
+##Worker side (on the server with GPU):
+At the worker side make sure the correct type of Tensorflow is installed i.e. Tensorflow-GPU, copy the same `clusterspec.json` file that has `x.x.x.x:2222` replaced with the IP address of the worker server.   
+
+```
+import sys
+import json
+import tensorflow as tf
+task_number = int(sys.argv[1])
+
+with open('cluster_spec/clusterspec.json', 'r') as f:
+    cluster_spec = json.load(f)
+
+cluster = tf.train.ClusterSpec(cluster_spec)
+server = tf.train.Server(cluster, job_name="worker", task_index=task_number)
+
+print("Starting server #{}".format(task_number))
+
+server.start()
+server.join()
+
+```
+Run the above code `gpu_worker_0.py` with `0` as command line input, if you have more than one worker, you can have more numbers of the `gpu_worker_0.py` file with the `0` part replaced with the worker number. Also, the `clusterspec.json` is to be updated with the IP address of the second worker in this manner `{"worker":["x.x.x.x:2222","y.y.y.y:2223"]}`, in that case the new worker code are to be initialized with `1`, `2`, `3` and so on, as command line inputs.
+
+
+With the `cluster-tf.py` and `gpu_worker_0.py` running on two different servers but on the same network the output screens from the worker show show device placement on the GPU (in my case a GTX 1050Ti) 
+<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/worker-side.png" width="480"> and the parameter server side will give out the result, here `11.0` which was a result of the mathematical operation. <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/ps-side.png" width="480">
+
+#Note
+If your worker server is a Windows computer, make sure you can `ping` the IP address if not add the IP address you are trying to ping from into firewall exclusions.   
+
+
+## Authors
+* **Debjyoti Chowdhury** - *Initial work* - [MyGithub](https://github.com/debjyotiC)
+
+## License
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
