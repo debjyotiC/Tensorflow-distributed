@@ -30,7 +30,7 @@ with tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=T
 In order to distribute you need to create a session on one of those `parameter servers`, and it will compute the graph, possibly distributing parts of it to the `worker` clusters on the server.
 <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/server-clinet-model.png" width="480">
 
-##Parameter server side (on Raspberry Pi):
+## Parameter server side (on Raspberry Pi):
 At the parameter server side, the example code shown above has been modified to support distribution, with a simple `json` file pointing at the IP address of the `worker` machine (the one with a GPU).
 
 ```
@@ -56,7 +56,7 @@ with tf.compat.v1.Session('grpc://X.X.X.X:2222', config=tf.compat.v1.ConfigProto
 ```
 Replace the `x.x.x.x:2222` with the IP address of server that has a GPU in it. (Try `ifconfig`/`ipconfig` for Linux\Windows server), both in the `cluster-tf.py` and the `clusterspec.json` file.
 
-##Worker side (on the server with GPU):
+## Worker side (on the server with GPU):
 At the worker side make sure the correct type of Tensorflow is installed i.e. Tensorflow-GPU, copy the same `clusterspec.json` file that has `x.x.x.x:2222` replaced with the IP address of the worker server.   
 
 ```
@@ -81,9 +81,9 @@ Run the above code `gpu_worker_0.py` with `0` as command line input, if you have
 
 
 With the `cluster-tf.py` and `gpu_worker_0.py` running on two different servers but on the same network the output screens from the worker show show device placement on the GPU (in my case a GTX 1050Ti) 
-<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/worker-side.png" width="780"> and the parameter server side will give out the result, here `11.0` which was a result of the mathematical operation. <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/ps-side.png" width="780">
+<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/worker-side.png" width="880"> and the parameter server side will give out the result, here `11.0` which was a result of the mathematical operation. <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/ps-side.png" width="880">
 
-#Note
+## Note
 If your worker server is a Windows computer, make sure you can `ping` the IP address if not add the IP address you are trying to ping from into firewall exclusions.   
 
 
@@ -92,3 +92,8 @@ If your worker server is a Windows computer, make sure you can `ping` the IP add
 
 ## License
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+
+
+## Acknowledgments
+
+* **Distributed Computing with TensorFlow** Link(https://databricks.com/tensorflow/distributed-computing-with-tensorflow)
