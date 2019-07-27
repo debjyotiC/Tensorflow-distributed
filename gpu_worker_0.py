@@ -3,7 +3,7 @@ import json
 import tensorflow as tf
 task_number = int(sys.argv[1])
 
-with open('cluster_ips/cluster_spec.json', 'r') as f:
+with open('cluster_spec/clusterspec.json', 'r') as f:
     cluster_spec = json.load(f)
 
 cluster = tf.train.ClusterSpec(cluster_spec)
