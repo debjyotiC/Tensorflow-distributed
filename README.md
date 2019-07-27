@@ -81,7 +81,7 @@ Run the above code `gpu_worker_0.py` with `0` as command line input, if you have
 
 
 With the `cluster-tf.py` and `gpu_worker_0.py` running on two different servers but on the same network the output screens from the worker show show device placement on the GPU (in my case a GTX 1050Ti) 
-<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/worker-side.png" width="480"> and the parameter server side will give out the result, here `11.0` which was a result of the mathematical operation. <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/ps-side.png" width="480">
+<img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/worker-side.png" width="580"> and the parameter server side will give out the result, here `11.0` which was a result of the mathematical operation. <img src="https://github.com/debjyotiC/Tensorflow-distributed/blob/master/images/ps-side.png" width="580">
 
 #Note
 If your worker server is a Windows computer, make sure you can `ping` the IP address if not add the IP address you are trying to ping from into firewall exclusions.   
